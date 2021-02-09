@@ -1,6 +1,11 @@
+import React, {useState} from 'react'
+import {useHistory} from 'react-router-dom'
+import {useDispatch} from 'react-redux'
+import {saveUser} from '../../redux/actions/user'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Input, InputLabel, FormHelperText} from '@material-ui/core'
-import React from 'react'
 import {makeStyles} from '@material-ui/core'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
 const useStyles = makeStyles((theme)=>({
     dialogForm:{
@@ -10,39 +15,62 @@ const useStyles = makeStyles((theme)=>({
 
     },
 }))
-
-
-export default function Login(){
+export default function Register(){
+    const history = useHistory()
+    const dispatch = useDispatch()
     const classes=useStyles()
+    const [user, setUser] = useState({email:'', password:''})
+
+    const handleInput = (e) =>{
+        setUser({...user, [e.target.name] : e.target.value})
+    }
+    const handleSubmit = (e) =>{
+        axios({
+            method: 'post',
+            url: 'http://localhost:3001/api/login',
+            data: user
+        })
+        .then(res => res.data)
+        .then(data => {
+            console.log(data)
+            localStorage.setItem('token',data.token)
+            let userData = {
+                id: data.userId,
+                name: data.name,
+                lastName: data.lastName
+            }
+            dispatch(saveUser(userData))  
+        })
+        handleQuit()
+    }
+
+    const handleQuit = () => {
+        setTimeout(function(){history.push('/')},1000)
+        
+    }
+
+    if(user){
+        console.log(user)
+    }
     return(
-    <div>
-        <Dialog open={true}>
-            <DialogTitle>Ingresa a tu cuenta</DialogTitle>
+        <div>
+            <Dialog open={true}>
+            <DialogTitle>Ingreso de Usuario</DialogTitle>
             <DialogContent className={classes.dialogForm}>
-            <FormControl>
-                <InputLabel htmlFor="name">Nombre</InputLabel>
-                <Input id="name" aria-describedby="my-helper-text" />
+            <FormControl onChange={handleInput}>
+                <InputLabel htmlFor="email">email</InputLabel>
+                <Input name="email" id="email" aria-describedby="my-helper-text" />
             </FormControl>
-            <FormControl>
-                <InputLabel htmlFor="lastName">Apellido</InputLabel>
-                <Input id="lastName" aria-describedby="my-helper-text" />
-            </FormControl>
-            <FormControl>
-                <InputLabel htmlFor="my-input">email</InputLabel>
-                <Input id="my-input" aria-describedby="my-helper-text" />
-                <FormHelperText id="my-helper-text">xxx@xxx.xxx</FormHelperText>
-            </FormControl>
-            <FormControl>
+            <FormControl onChange={handleInput}>
                 <InputLabel htmlFor="password">contraseña</InputLabel>
-                <Input id="password" aria-describedby="my-helper-text" />
-                <FormHelperText id="my-helper-text">Al menos 8 caracteres</FormHelperText>
+                <Input type="password" name="password" id="password" />
             </FormControl>
             </DialogContent>
             <DialogActions>
-                <Button variant="outlined" color="primary">Entrar</Button>
-                <Button variant="outlined" color="secondary">Cancelar</Button>
+                <Button variant="outlined" color="primary" onClick={handleSubmit}>Ingresar</Button>
+                <Button variant="outlined" color="secondary" onClick={handleQuit}>Cancelar</Button>
             </DialogActions>
         </Dialog>
-    </div>
+        </div>
     )
 }
