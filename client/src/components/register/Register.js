@@ -3,6 +3,7 @@ import {useHistory} from 'react-router-dom'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Input, InputLabel, FormHelperText} from '@material-ui/core'
 import {makeStyles} from '@material-ui/core'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 const useStyles = makeStyles((theme)=>({
     dialogForm:{
@@ -27,9 +28,17 @@ export default function Register(){
             data: user
         })
         .then(res => res.data)
-        .then(data => {
-            console.log(data)
-        }) 
+        .then(data=>{
+            if(data){
+                Swal.fire('Registrado exitosamente')
+                handleQuit()
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            Swal.fire('No fue posible registrar el usuario')
+        } )
+        
     }
 
     const handleQuit = () => {

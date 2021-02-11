@@ -2,10 +2,11 @@ import React, {useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
 import {saveUser} from '../../redux/actions/user'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Input, InputLabel, FormHelperText} from '@material-ui/core'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Input, InputLabel} from '@material-ui/core'
 import {makeStyles} from '@material-ui/core'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+
 
 const useStyles = makeStyles((theme)=>({
     dialogForm:{
@@ -32,20 +33,35 @@ export default function Register(){
         })
         .then(res => res.data)
         .then(data => {
-            console.log(data)
-            localStorage.setItem('token',data.token)
-            let userData = {
-                id: data.userId,
-                name: data.name,
-                lastName: data.lastName
+            console.log("data: ", data)
+            if(data){
+                
+                localStorage.setItem('token',data.token)
+                let userData = {
+                    id: data.userId,
+                    name: data.name,
+                    lastName: data.lastName
+                    }
+                dispatch(saveUser(userData))
+                Swal.fire('Usuario verificado')
+                handleQuit() 
             }
-            dispatch(saveUser(userData))  
+            else{
+                Swal.fire('Datos incorrectos','Inténtalo nuevamente')
+                handleQuit() 
+            } 
         })
-        handleQuit()
+        .catch((err)=>{
+            console.log("Error")
+            Swal.fire('Ha ocurrido un error','Inténtalo nuevamente')
+            handleQuit()
+        })
+        
     }
 
     const handleQuit = () => {
-        setTimeout(function(){history.push('/')},1000)
+        history.push('/')
+        // setTimeout(function(){history.push('/')},500)
         
     }
 

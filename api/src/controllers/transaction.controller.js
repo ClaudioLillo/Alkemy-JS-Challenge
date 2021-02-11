@@ -42,15 +42,36 @@ export const createTransaction = async(req, res)=>{
    
 }
 
-const deleteTransaction = (req, res)=>{
+export const deleteTransaction = async(req, res)=>{
     const id = req.body.id
-    console.log(id)
-    return(res.json({
-        msg: "done"
-    }))
+    try{
+        let transaction = await Transaction.findByPk(id)
+        if(transaction){
+            await transaction.destroy()
+            return res.status(204).json({msg: "transaction deleted"})
+        }
+    }
+    catch(err){
+        console.log(err)
+    }
+}
 
-
+export const updateTransaction = async(req, res)=>{
+    const {id, amount, concept} = req.body
+    try{
+        let transaction = await Transaction.findByPk(id)
+        if(transaction){
+            transaction.amount = amount
+            transaction.concept = concept
+            transaction.date = date
+            await transaction.save()
+            return res.json({msg: "transaction updated"})
+        }
+    }
+    catch(err){
+        console.log(err)
+    }
 }
 
 
-module.exports = {getTransactions, createTransaction, deleteTransaction}
+// module.exports = {getTransactions, createTransaction, deleteTransaction, }

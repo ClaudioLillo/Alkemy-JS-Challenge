@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import {useHistory} from 'react-router-dom'
 import axios from 'axios'
 
@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 import Balance from '../balance/Balance'
+import Landing from '../landing/Landing'
 import { Button, Grid, Typography } from '@material-ui/core';
 import { getUserTransactions } from '../../redux/actions/transactions'
 
@@ -79,10 +80,6 @@ export default function Home(){
         }
     },[dispatch])
 
-    useEffect(()=>{
-        console.log("contador")
-    },[])
-
     const gotoRegister = () =>{
         history.push('/register')
     }
@@ -93,9 +90,8 @@ export default function Home(){
         localStorage.clear()
         window.location.reload({forceReload: false})
     }
-
-    if(user){
-        console.log("Home user: ", user)
+    const camelCase = (string)=>{
+        return string[0].toUpperCase() + string.substring(1,string.length)
     }
 
     return(
@@ -111,14 +107,14 @@ export default function Home(){
                 <Grid item xs={6} sm={3}>
                 <Typography 
                     className={classes.userName}
-                    variant="h5"
-                    component="h5">
-                    {user.name+" "+user.lastName}
+                    variant="h6"
+                    >
+                    {camelCase(user.name)+" "+camelCase(user.lastName)}
                 </Typography>
                 </Grid>
                 :
                 <>
-                <Grid item xs={6} sm={2}>
+                <Grid item xs={5} sm={2}>
                     <Button className={classes.loginButton} 
                             variant="outlined" 
                             color="default"
@@ -145,7 +141,10 @@ export default function Home(){
                 </Grid> 
             </AppBar>
             <Grid container>
+            {user ?
             <Balance/>
+            :<Landing/>
+            }
             </Grid>
             
         </div>

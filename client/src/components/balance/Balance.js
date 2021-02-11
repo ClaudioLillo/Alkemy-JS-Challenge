@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 import {makeStyles} from '@material-ui/core/styles'
-import { Table, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, Grid } from '@material-ui/core'
+import { Table, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, Grid, TableBody } from '@material-ui/core'
 
 import Add from '../transaction/Add'
 import Detail from '../transaction/Detail'
@@ -68,6 +68,7 @@ export default function Balance(){
                     </TableRow>
 
                 </TableHead>
+                <TableBody>
                 {transactions && transactions.map((transaction,i)=>
                     <TableRow key={i}>
                         <TableCell>{transaction.date}</TableCell>
@@ -79,7 +80,7 @@ export default function Balance(){
                         </TableCell>
                     </TableRow>
                     )}
-                
+                </TableBody>
             </Table>
             </TableContainer>
             </Grid>

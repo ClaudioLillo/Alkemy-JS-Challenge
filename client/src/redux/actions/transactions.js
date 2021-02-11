@@ -23,7 +23,6 @@ export function createTransaction(data, token){
 }
 
 export function getUserTransactions(token){
-    console.log("en el action")
     return async function(dispatch){
         try{
             return await axios({
@@ -39,6 +38,49 @@ export function getUserTransactions(token){
                     payload: res.data.transactions
             })
         })}
+        catch(err){
+            console.log(err)
+        }
+    }
+}
+
+export function deleteTransaction(data,token){
+    return async function(dispatch){
+        try{
+            return await axios({
+                method: 'delete',
+                url: 'http://localhost:3001/api/transactions',
+                data: data,
+                headers: {
+                    "x-access-token": token
+                }
+            })
+            .then(res=>{
+                console.log(res)
+            })
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+}
+
+export function updateTransaction(data, token){
+    return async function (dispatch){
+        try{
+            return await axios({
+                method: 'put',
+                url: 'http://localhost:3001/api/transactions',
+                data: data,
+                headers:{
+                    "x-access-token": token 
+                }
+            })
+            .then(res=>{
+                console.log(res)
+            })
+            
+        }
         catch(err){
             console.log(err)
         }
