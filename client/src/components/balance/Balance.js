@@ -46,7 +46,6 @@ export default function Balance(){
             setBalance(sum)
         }
     },[transactions])
-    
 
     return(
         <div className={classes.root}>
@@ -70,6 +69,8 @@ export default function Balance(){
                 </TableHead>
                 <TableBody>
                 {transactions && transactions.map((transaction,i)=>
+                    <>
+                    {(i<10)&&
                     <TableRow key={i}>
                         <TableCell>{transaction.date}</TableCell>
                         <TableCell>
@@ -79,6 +80,7 @@ export default function Balance(){
                             {categorySymbol(transaction.category)+" "+transaction.amount}
                         </TableCell>
                     </TableRow>
+                    }</>
                     )}
                 </TableBody>
             </Table>

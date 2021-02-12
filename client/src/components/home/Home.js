@@ -80,6 +80,8 @@ export default function Home(){
         }
     },[dispatch])
 
+    
+
     const gotoRegister = () =>{
         history.push('/register')
     }

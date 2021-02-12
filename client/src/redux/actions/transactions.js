@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export function createTransaction(data, token){
     return async function (dispatch){
@@ -13,6 +14,7 @@ export function createTransaction(data, token){
             })
             .then(res=>{
                 console.log(res)
+                Swal.fire('Transacción agregada con éxito')
             })
             
         }
@@ -33,6 +35,7 @@ export function getUserTransactions(token){
                 }
             })
             .then(res =>{
+                console.log("get res", res)
                 dispatch({
                     type: 'SAVE_USER_TRANSACTIONS',
                     payload: res.data.transactions
@@ -56,7 +59,8 @@ export function deleteTransaction(data,token){
                 }
             })
             .then(res=>{
-                console.log(res)
+                console.log("delete res :", res)
+                getUserTransactions(token)
             })
         }
         catch(err){

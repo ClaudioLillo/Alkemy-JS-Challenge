@@ -2,9 +2,9 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl,
 import {makeStyles} from '@material-ui/core'
 import React, {useState} from 'react'
 import {useDispatch} from 'react-redux'
-
+import {useHistory} from 'react-router-dom'
 import {currentDate as current}  from '../utils/getDate'
-import {createTransaction, updateTransaction} from '../../redux/actions/transactions'
+import {createTransaction, updateTransaction, getUserTransactions} from '../../redux/actions/transactions'
 
 const category = [
     {
@@ -35,6 +35,7 @@ export default function Add({transaction}){
     const classes = useStyles()
     const token = localStorage.getItem('token')
     const dispatch = useDispatch()
+    const history = useHistory()
     const [open, setOpen] = useState(false)
     const [inputs, setInputs] = useState({
         concept:'', 
@@ -52,13 +53,23 @@ export default function Add({transaction}){
         setOpen(true)
     }
     const handleClose = ()=>{
+        history.push('/')
+        dispatch(getUserTransactions(token))
         setOpen(false)
     }
     const handleSubmit = ()=>{
         dispatch(createTransaction(inputs,token))
+        cleanForm()
     }
     const edit = ()=>{
         dispatch(updateTransaction(inputs, token))
+    }
+    const cleanForm = ()=>{
+        setInputs({
+            concept:'', 
+            category:'entry',
+            amount: '0', 
+            date: current})
     }
 
     return(
@@ -82,7 +93,8 @@ export default function Add({transaction}){
                         <TextField name="concept" 
                                     label="Concepto" 
                                     variant="outlined"
-                                    defaultValue={transaction? transaction.concept : null}/>
+                                    value={transaction? transaction.concept : inputs.concept}
+                                    />
                     </FormControl>
                     <FormControl className={classes.formControl}>
                     <TextField
@@ -127,7 +139,8 @@ export default function Add({transaction}){
                 <DialogActions>
                     <Button onClick={handleClose} 
                             variant="outlined"
-                            color="secondary">Cancelar</Button>
+                            color="default">Hecho</Button>
+
                     <Button onClick={transaction?edit:handleSubmit} 
                             variant="outlined"
                             color="primary">{transaction?"Editar":"Agregar"}</Button>

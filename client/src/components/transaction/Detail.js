@@ -1,13 +1,16 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@material-ui/core'
 import React, {useState} from 'react'
-import {deleteTransaction} from '../../redux/actions/transactions'
+import {deleteTransaction, getUserTransactions} from '../../redux/actions/transactions'
 import {useDispatch} from 'react-redux'
 import Add from '../transaction/Add'
+import Swal from 'sweetalert2'
+import {useHistory} from 'react-router-dom'
 
 export default function Detail({transaction}){
     const [open, setOpen] = useState(false)
     const token = localStorage.getItem('token')
     const dispatch = useDispatch()
+    const history = useHistory()
 
     const stringLimit = (str, len)=>{
         return str.substring(0,len)+"..."
@@ -25,9 +28,14 @@ export default function Detail({transaction}){
         return (cat==='entry')? "Ingreso" : "Egreso"
     }
 
-    const deleteCurrentTransaction=()=>{
+    const deleteCurrentTransaction =()=>{
         let data = {id: transaction.id}
         dispatch(deleteTransaction(data, token))
+        Swal.fire('Transacción eliminada')
+        
+        handleClose()
+        history.push("/")
+        dispatch(getUserTransactions(token))
 
     }
     if(transaction && open){
