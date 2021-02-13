@@ -45,9 +45,6 @@ export default function Register(){
         history.push('/')
     }
 
-    if(user){
-        console.log(user)
-    }
     return(
         <div>
             <Dialog open={true}>

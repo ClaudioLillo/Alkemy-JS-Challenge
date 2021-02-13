@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) =>({
     },
     appBarContainer:{
         width: '100%',
-        border: '1px solid black',
     },
 }))
 

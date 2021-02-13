@@ -33,7 +33,6 @@ export default function Register(){
         })
         .then(res => res.data)
         .then(data => {
-            console.log("data: ", data)
             if(data){
                 
                 localStorage.setItem('token',data.token)
@@ -61,13 +60,9 @@ export default function Register(){
 
     const handleQuit = () => {
         history.push('/')
-        // setTimeout(function(){history.push('/')},500)
         
     }
 
-    if(user){
-        console.log(user)
-    }
     return(
         <div>
             <Dialog open={true}>

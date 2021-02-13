@@ -44,8 +44,6 @@ export default function Add({transaction}){
         date: current})
     
     const handleChange = (event) => {
-        console.log(event.target.name)
-        console.log(event.target.value)
         setInputs({...inputs, [event.target.name]: event.target.value})
     }
 
@@ -89,10 +87,11 @@ export default function Add({transaction}){
             <Dialog open={open}>
                 <DialogTitle>Nueva transacción</DialogTitle>
                 <DialogContent>
-                    <FormControl className={classes.formControl} onChange={handleChange}>
+                    <FormControl className={classes.formControl} >
                         <TextField name="concept" 
                                     label="Concepto" 
                                     variant="outlined"
+                                    onChange={handleChange}
                                     value={transaction? transaction.concept : inputs.concept}
                                     />
                     </FormControl>
@@ -117,12 +116,13 @@ export default function Add({transaction}){
                     ))}
                     </TextField>
                     </FormControl>
-                    <FormControl className={classes.formControl} onChange={handleChange}>
+                    <FormControl className={classes.formControl} >
                         <label htmlFor="amount">Monto: </label>
                         <input type="number" 
                                 className={classes.numberInput}  
                                 name="amount" 
                                 id="amount"
+                                onChange={handleChange}
                                 value={transaction? transaction.amount : inputs.amount}/>
                     </FormControl>
                     <FormControl onChange={handleChange} className={classes.formControl}>
