@@ -68,17 +68,16 @@ export function deleteTransaction(data,token){
 
 export function updateTransaction(data, token){
     return async function (dispatch){
+        console.log("en el action")
         try{
-            return await axios({
-                method: 'put',
-                url: 'http://localhost:3001/api/transactions',
-                data: data,
-                headers:{
+            return await axios.put('http://localhost:3001/api/transactions', data,
+                {headers:{
                     "x-access-token": token 
-                }
-            })
+                }})
             .then(res=>{
-                console.log(res)
+                console.log(res.status)
+                Swal.fire('Transacción editada')
+
             })
             
         }

@@ -57,19 +57,26 @@ export const deleteTransaction = async(req, res)=>{
 }
 
 export const updateTransaction = async(req, res)=>{
-    const {id, amount, concept} = req.body
+    const {id, amount, category, date, concept} = req.body
+    const userId = req.userId
     try{
         let transaction = await Transaction.findByPk(id)
         if(transaction){
+            console.log("transaction: ", transaction)
             transaction.amount = amount
+            transaction.category = category
             transaction.concept = concept
             transaction.date = date
             await transaction.save()
             return res.json({msg: "transaction updated"})
         }
+        console.log("no está")
+        return res.status(404).json({msg: "transaction not found"})
     }
     catch(err){
+        console.log("en el error del api")
         console.log(err)
+        return res.status(404).json({msg: "not found"})
     }
 }
 

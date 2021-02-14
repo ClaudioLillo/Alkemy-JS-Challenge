@@ -5,6 +5,7 @@ import { Table, TableCell, TableContainer, TableHead, TableRow, Typography, Pape
 
 import Add from '../transaction/Add'
 import Detail from '../transaction/Detail'
+import Empty from '../transaction/Empty'
 
 const useStyles = makeStyles((theme) =>({
     root:{
@@ -21,12 +22,16 @@ const useStyles = makeStyles((theme) =>({
     out: {
         color: 'red',
     },
+    filter: {
+        marginBottom: '20px',
+        marginLeft: '20px',
+    },
 }))
 
 export default function Balance(){
     const classes = useStyles()
     const transactions = useSelector(state=>state.transactions.data)
-    const [balance, setBalance] = useState(null)
+    const [balance, setBalance] = useState(0)
     const [filter, setFilter] = useState("all")
 
      const categorySymbol = (cat) =>{
@@ -68,7 +73,7 @@ export default function Balance(){
                     <Add/>
                 </Grid>
             <Grid item xs={6} sm={3}>
-            <FormControl variant="outlined">
+            <FormControl variant="outlined" className={classes.filter}>
                 <InputLabel>Ver</InputLabel>
                 <Select
                     value={filter}
@@ -111,6 +116,7 @@ export default function Balance(){
             </TableContainer>
             </Grid>
             </Grid>
+            <Empty transactions={transactions}/>
         </div>
     )
 }

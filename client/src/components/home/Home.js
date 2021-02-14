@@ -58,6 +58,7 @@ export default function Home(){
     const history = useHistory()
     const dispatch = useDispatch()
     const [user, setUser] = useState(null)
+    const token = localStorage.getItem('token')
     
 
     useEffect(()=>{
@@ -142,7 +143,7 @@ export default function Home(){
                 </Grid> 
             </AppBar>
             <Grid container>
-            {user ?
+            {token ?
             <Balance/>
             :<Landing/>
             }

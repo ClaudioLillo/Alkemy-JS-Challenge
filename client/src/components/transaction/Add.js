@@ -20,6 +20,7 @@ const category = [
 const useStyles = makeStyles((theme)=>({
     button: {
         marginLeft: 'auto',
+        marginBottom: '20px',
     },
     formControl: {
         margin: '10px',
@@ -38,9 +39,9 @@ export default function Add({transaction}){
     const history = useHistory()
     const [open, setOpen] = useState(false)
     const [inputs, setInputs] = useState({
-        concept:'', 
+        concept: transaction ? transaction.concept : '', 
         category:'entry',
-        amount: '0', 
+        amount: transaction ? transaction.amount: '0', 
         date: current})
     
     const handleChange = (event) => {
@@ -60,7 +61,11 @@ export default function Add({transaction}){
         cleanForm()
     }
     const edit = ()=>{
-        dispatch(updateTransaction(inputs, token))
+        console.log("editar")
+        let data = {...inputs, id: transaction.id}
+        dispatch(updateTransaction(data, token))
+        dispatch(getUserTransactions(token))
+        handleClose()
     }
     const cleanForm = ()=>{
         setInputs({
@@ -85,14 +90,16 @@ export default function Add({transaction}){
                     onClick={handleOpen}>Nueva transacción
             </Button>}
             <Dialog open={open}>
-                <DialogTitle>Nueva transacción</DialogTitle>
+                <DialogTitle>
+                    {transaction?"Editar transacción": "Nueva transacción"}
+                </DialogTitle>
                 <DialogContent>
                     <FormControl className={classes.formControl} >
                         <TextField name="concept" 
                                     label="Concepto" 
                                     variant="outlined"
                                     onChange={handleChange}
-                                    value={transaction? transaction.concept : inputs.concept}
+                                    value={inputs.concept}
                                     />
                     </FormControl>
                     <FormControl className={classes.formControl}>
@@ -123,7 +130,7 @@ export default function Add({transaction}){
                                 name="amount" 
                                 id="amount"
                                 onChange={handleChange}
-                                value={transaction? transaction.amount : inputs.amount}/>
+                                value={inputs.amount}/>
                     </FormControl>
                     <FormControl onChange={handleChange} className={classes.formControl}>
                         <label htmlFor="date">Fecha: </label>
