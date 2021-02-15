@@ -11,8 +11,12 @@ export const verifyToken = async (req, res, next) =>{
         return res.status(403).json({message: "No Token Provided"})
         }
         const decoded = jwt.verify(token, process.env.SECRET)
+        if(decoded.JsonWebTokenError){
+            console.log("Error de jwt")
+            return res.status(403).json({msg: "Unauthorized"})
+        }
         console.log("decoded: ", decoded)
-        req.userId = decoded.user.id //se guarda el valor del id extraido por jwt en el request
+        req.userId = decoded.user.id 
 
         const user = await User.findOne({
             where:{
@@ -24,8 +28,7 @@ export const verifyToken = async (req, res, next) =>{
         next()
     }
     catch(error){
-        res.json({message: 'Unauthorized'})
-        console.log(error)
+        res.status(403).json({message: 'Unauthorized'})
     }
     
 }

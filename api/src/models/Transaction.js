@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize'
-import {sequelize} from '../database/database'
+import sequelize from '../database/database'
 
 const Transaction = sequelize.define('transaction',{
     amount: {
@@ -21,7 +21,7 @@ const Transaction = sequelize.define('transaction',{
     timestamps: true
 })
 
-Transaction.sync({force:true})
+Transaction.sync({force: true})
 
 export default Transaction
 

@@ -3,17 +3,28 @@ import User from '../models/User'
 export const createUser = async(req, res) => {
     const {name, lastName, email, password} = req.body
     try{
-        const newUser = await User.create({
-            name,
-            lastName,
-            email,
-            password
-        }, {
-            fields: ['name', 'lastName', 'email', 'password']
+        const user = await User.findOne({
+            where: {
+                email: email
+            }
         })
-        if(newUser){
-            return(res.json({msg: "User created"}))
+        if(user){
+            return(res.status(409).json({msg: "Email adress is already registered"}))
         }
+        else{
+            const newUser = await User.create({
+                name,
+                lastName,
+                email,
+                password
+            }, {
+                fields: ['name', 'lastName', 'email', 'password']
+            })
+            if(newUser){
+                return(res.status(201).json({msg: "User created"}))
+            }
+        }
+        
     }
     catch(e){
         console.log(e)

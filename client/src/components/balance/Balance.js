@@ -62,6 +62,12 @@ export default function Balance(){
         }
         return false
     }
+    const dateFormat = (string)=>{
+        let day = string.slice(8,10)
+        let month = string.slice(5,7)
+        let year = string.slice(0,4)
+        return(day+"-"+month+"-"+year)
+    }
 
     return(
         <div className={classes.root}>
@@ -101,7 +107,7 @@ export default function Balance(){
                     <TableRow key={i}>
                     {((i<10) && (applyFilter(transaction))) &&
                     <>
-                        <TableCell>{transaction.date}</TableCell>
+                        <TableCell>{dateFormat(transaction.date)}</TableCell>
                         <TableCell>
                             <Detail transaction={transaction}/>
                         </TableCell>

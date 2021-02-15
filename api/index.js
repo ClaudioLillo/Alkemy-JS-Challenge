@@ -1,9 +1,9 @@
 import app from './src/app'
+import sequelize from './src/database/database.js'
 
-async function main(){
-    await app.listen(3001)
-    console.log('Server on port 3001')
-}
-
-main()
+sequelize.sync({force: true}).then(()=>{
+    app.listen(3001, ()=>{
+        console.log('%s listening on port 3001')
+    })
+})
 
